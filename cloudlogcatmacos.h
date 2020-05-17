@@ -6,23 +6,26 @@
 #include <QMessageBox>
 #include <QXmlStreamReader>
 #include <QNetworkReply>
+#include <QUrlQuery>
+#include <QSettings>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class CloudLogCATMacOS; }
 QT_END_NAMESPACE
 
-class CloudLogCATMacOS : public QMainWindow
+class CloudLogCATQt : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    CloudLogCATMacOS(QWidget *parent = nullptr);
-    ~CloudLogCATMacOS();
+    CloudLogCATQt(QWidget *parent = nullptr);
+    ~CloudLogCATQt();
 
 private slots:
-    void on_pushButton_clicked();    
     void callbackFrequency(QNetworkReply *rep);
     void callbackMode(QNetworkReply *rep);
+
+    void on_save_clicked();
 
 private:
     Ui::CloudLogCATMacOS *ui;
@@ -31,9 +34,16 @@ private:
     void getMode();
     void getFromFLRig(QString command, QNetworkAccessManager *manager);
     QString parseXML(QString xml);
+    void uploadToCloudLog();
+    void loadSettings();
 
     QNetworkAccessManager *frequencyManager;
     QNetworkAccessManager *modeManager;
+    QNetworkAccessManager *cloudLogManager;
+    QString frequency;
+    QString mode;
+
+    QString settingsFile;
 
 protected:
     void timerEvent(QTimerEvent *event);

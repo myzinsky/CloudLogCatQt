@@ -96,7 +96,7 @@
          </sizepolicy>
         </property>
         <property name="text">
-         <string>localhost</string>
+         <string/>
         </property>
        </widget>
       </item>
@@ -116,7 +116,7 @@
       <item row="1" column="1">
        <widget class="QLineEdit" name="FLDigiPort">
         <property name="text">
-         <string>12345</string>
+         <string/>
         </property>
        </widget>
       </item>
@@ -136,7 +136,7 @@
       <item row="2" column="1">
        <widget class="QLineEdit" name="cloudLogUrl">
         <property name="text">
-         <string>https://log.jung.ms/index.php/api/radio</string>
+         <string/>
         </property>
        </widget>
       </item>
@@ -162,7 +162,7 @@
       <item row="3" column="1">
        <widget class="QLineEdit" name="cloudLogKey">
         <property name="text">
-         <string>cl5eb32c16c7302</string>
+         <string/>
         </property>
        </widget>
       </item>
