@@ -33,6 +33,9 @@ CloudLogCATQt::CloudLogCATQt(QWidget *parent)
     // Setup Settings File:
     settingsFile = QApplication::applicationDirPath() + "/settings.ini"; 
     loadSettings();
+
+    // Set Status Bar
+    ui->statusbar->showMessage("(c) 2020 DL9MJ");
 }
 
 CloudLogCATQt::~CloudLogCATQt()
@@ -92,7 +95,9 @@ void CloudLogCATQt::uploadToCloudLog()
     cloudLogManager->post(request, data);
 
     qDebug() << "Update Cloud Log: " << data;
-    ui->statusbar->showMessage("Cloudlog Updated: " + currentTime.toString("yyyy/MM/dd hh:mm:ss"));
+    ui->statusbar->showMessage("Cloudlog Updated: "
+                               + currentTime.toString("yyyy/MM/dd hh:mm:ss")
+                               + " | (c) 2020 DL9MJ");
 }
 
 void CloudLogCATQt::loadSettings()
