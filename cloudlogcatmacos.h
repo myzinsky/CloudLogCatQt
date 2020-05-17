@@ -6,7 +6,6 @@
 #include <QMessageBox>
 #include <QXmlStreamReader>
 #include <QNetworkReply>
-#include <QUrlQuery>
 #include <QSettings>
 
 QT_BEGIN_NAMESPACE
@@ -24,6 +23,7 @@ public:
 private slots:
     void callbackFrequency(QNetworkReply *rep);
     void callbackMode(QNetworkReply *rep);
+    void callbackCloudLog(QNetworkReply *rep);
 
     void on_save_clicked();
 

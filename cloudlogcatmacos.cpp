@@ -24,6 +24,11 @@ CloudLogCATQt::CloudLogCATQt(QWidget *parent)
     );
 
     cloudLogManager = new QNetworkAccessManager(this);
+    connect(cloudLogManager,
+            SIGNAL(finished(QNetworkReply*)),
+            this,
+            SLOT(callbackCloudLog(QNetworkReply*))
+    );
 
     // Setup Settings File:
     settingsFile = QApplication::applicationDirPath() + "/settings.ini"; 
@@ -70,20 +75,20 @@ void CloudLogCATQt::uploadToCloudLog()
     QDateTime currentTime = QDateTime::currentDateTime();
     QByteArray data;
 
-    QUrlQuery query;
-    query.addQueryItem("key", ui->cloudLogKey->text());
-    query.addQueryItem("radio","CloudLogCATMacOS"); // TODO
-    query.addQueryItem("frequency", frequency);
-    query.addQueryItem("mode", mode);
-    query.addQueryItem("timestamp", currentTime.toString("yyyy/MM/dd hh:mm"));
-
-    data = query.toString(QUrl::FullyEncoded).toUtf8();
+    QString str = QString("")
+                + "{"
+                + "\"key\" : \"" + ui->cloudLogKey->text() + "\","
+                + "\"radio\" : \"CloudLogCATQt\" ,"
+                + "\"frequency\" : \"" + frequency + "\","
+                + "\"mode\" : \"" + mode + "\","
+                + "\"timestamp\" : \"" + currentTime.toString("yyyy/MM/dd hh:mm") + "\""
+                + "}";
+    data = str.toUtf8();
 
     QUrl url = QUrl(ui->cloudLogUrl->text());
 
     QNetworkRequest request(url);
-    request.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/x-www-form-urlencoded"));
-
+    request.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/json"));
     cloudLogManager->post(request, data);
 
     qDebug() << "Update Cloud Log: " << data;
@@ -121,6 +126,11 @@ void CloudLogCATQt::callbackMode(QNetworkReply *rep)
         qDebug() << mode;
         uploadToCloudLog();
     }
+}
+
+void CloudLogCATQt::callbackCloudLog(QNetworkReply *rep)
+{
+    qDebug () << QString(rep->readAll());
 }
 
 void CloudLogCATQt::getFromFLRig(QString command, QNetworkAccessManager *manager)
