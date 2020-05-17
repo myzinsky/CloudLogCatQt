@@ -9,7 +9,7 @@
 #include <QSettings>
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class CloudLogCATMacOS; }
+namespace Ui { class CloudLogCATQt; }
 QT_END_NAMESPACE
 
 class CloudLogCATQt : public QMainWindow
@@ -28,7 +28,7 @@ private slots:
     void on_save_clicked();
 
 private:
-    Ui::CloudLogCATMacOS *ui;
+    Ui::CloudLogCATQt *ui;
     int timerId;
     void getFrequency();
     void getMode();

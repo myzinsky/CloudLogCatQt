@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>CloudLogCATMacOS</class>
- <widget class="QMainWindow" name="CloudLogCATMacOS">
+ <class>CloudLogCATQt</class>
+ <widget class="QMainWindow" name="CloudLogCATQt">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>CloudLogCATMacOS</string>
+   <string notr="true">CloudLogCATQt</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="minimumSize">
@@ -83,12 +83,12 @@
          </size>
         </property>
         <property name="text">
-         <string>FLDigi Hostname:</string>
+         <string>FLRig Hostname:</string>
         </property>
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QLineEdit" name="FLDigiHostname">
+       <widget class="QLineEdit" name="FLRigHostname">
         <property name="sizePolicy">
          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -109,12 +109,12 @@
          </size>
         </property>
         <property name="text">
-         <string>FLDigi Port:</string>
+         <string>FLRig Port:</string>
         </property>
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QLineEdit" name="FLDigiPort">
+       <widget class="QLineEdit" name="FLRigPort">
         <property name="text">
          <string/>
         </property>

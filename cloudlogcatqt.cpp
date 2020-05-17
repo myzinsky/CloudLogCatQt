@@ -1,9 +1,9 @@
-#include "cloudlogcatmacos.h"
-#include "ui_cloudlogcatmacos.h"
+#include "cloudlogcatqt.h"
+#include "ui_cloudlogcatqt.h"
 
 CloudLogCATQt::CloudLogCATQt(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::CloudLogCATMacOS)
+    , ui(new Ui::CloudLogCATQt)
 {
     ui->setupUi(this);
     timerId = startTimer(1000);
@@ -102,8 +102,8 @@ void CloudLogCATQt::loadSettings()
 
     ui->cloudLogUrl->setText(settings.value("cloudLogUrl","").toString());
     ui->cloudLogKey->setText(settings.value("cloudLogKey","").toString());
-    ui->FLDigiHostname->setText(settings.value("FLRigHostname", "localhost").toString());
-    ui->FLDigiPort->setText(settings.value("FLRigPort", "12345").toString());
+    ui->FLRigHostname->setText(settings.value("FLRigHostname", "localhost").toString());
+    ui->FLRigPort->setText(settings.value("FLRigPort", "12345").toString());
 }
 
 void CloudLogCATQt::callbackFrequency(QNetworkReply *rep)
@@ -140,8 +140,8 @@ void CloudLogCATQt::getFromFLRig(QString command, QNetworkAccessManager *manager
                 + command
                 + "</methodName><params></params></methodCall>");
 
-    QUrl url = QUrl("http://"+ui->FLDigiHostname->text());
-    url.setPort(ui->FLDigiPort->text().toInt());
+    QUrl url = QUrl("http://"+ui->FLRigHostname->text());
+    url.setPort(ui->FLRigPort->text().toInt());
 
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/x-www-form-urlencoded"));
@@ -165,6 +165,6 @@ void CloudLogCATQt::on_save_clicked()
 
     settings.setValue("cloudLogUrl",   ui->cloudLogUrl->text());
     settings.setValue("cloudLogKey",   ui->cloudLogKey->text());
-    settings.setValue("FLRigHostname", ui->FLDigiHostname->text());
-    settings.setValue("FLRigPort",     ui->FLDigiPort->text());
+    settings.setValue("FLRigHostname", ui->FLRigHostname->text());
+    settings.setValue("FLRigPort",     ui->FLRigPort->text());
 }

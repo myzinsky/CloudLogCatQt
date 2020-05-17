@@ -1,4 +1,4 @@
-#include "cloudlogcatmacos.h"
+#include "cloudlogcatqt.h"
 
 #include <QApplication>
 
