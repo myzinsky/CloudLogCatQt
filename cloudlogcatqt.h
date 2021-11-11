@@ -73,8 +73,10 @@ private:
     QNetworkAccessManager *frequencyManager;
     QNetworkAccessManager *modeManager;
     QNetworkAccessManager *cloudLogManager;
-    QString frequency;
+    double frequency;
+    double realFrequency;
     QString mode;
+    double txOffset;
 
     QString settingsFile;
 

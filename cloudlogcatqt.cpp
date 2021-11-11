@@ -66,6 +66,9 @@ CloudLogCATQt::CloudLogCATQt(QWidget *parent)
     // Setup Settings File:
     settingsFile = QApplication::applicationDirPath() + "/settings.ini"; 
     loadSettings();
+    txOffset = ui->TXOffset->text().toDouble();
+    qDebug() << "TX Offset:" << txOffset << "Hz";
+    realFrequency = 0.0;
 
     // Set Status Bar
     ui->statusbar->showMessage("(c) 2020 DL9MJ");
@@ -115,7 +118,7 @@ void CloudLogCATQt::uploadToCloudLog()
                 + "{"
                 + "\"key\" : \"" + ui->cloudLogKey->text() + "\","
                 + "\"radio\" : \"CloudLogCATQt\" ,"
-                + "\"frequency\" : \"" + frequency + "\","
+                + "\"frequency\" : \"" + QString{ "%1" }.arg( realFrequency, 1, 'f', 0) + "\","
                 + "\"mode\" : \"" + mode + "\","
                 + "\"timestamp\" : \"" + currentTime.toString("yyyy/MM/dd hh:mm") + "\""
                 + "}";
@@ -142,15 +145,20 @@ void CloudLogCATQt::loadSettings()
     ui->cloudLogKey->setText(settings.value("cloudLogKey","").toString());
     ui->FLRigHostname->setText(settings.value("FLRigHostname", "localhost").toString());
     ui->FLRigPort->setText(settings.value("FLRigPort", "12345").toString());
+    ui->TXOffset->setText(settings.value("TXOffset", "0").toString());
 }
 
 void CloudLogCATQt::callbackFrequency(QNetworkReply *rep)
 {
-    QString f = parseXML(QString(rep->readAll()));
+    double f = parseXML(QString(rep->readAll())).toDouble();
+
     if(f != frequency) { // Update UI and Cloudlog
         frequency = f;
-        ui->lcdNumber->display(frequency.toDouble()/1000.0/1000.0);
-        qDebug() << frequency;
+        realFrequency = frequency;
+        if (txOffset != 0.0) {
+            realFrequency += txOffset;
+        }
+        ui->lcdNumber->display(QString{ "%1" }.arg(realFrequency/1000.0/1000.0, 6, 'f', 5, '0' ));
         uploadToCloudLog();
     }
 }
@@ -205,4 +213,6 @@ void CloudLogCATQt::on_save_clicked()
     settings.setValue("cloudLogKey",   ui->cloudLogKey->text());
     settings.setValue("FLRigHostname", ui->FLRigHostname->text());
     settings.setValue("FLRigPort",     ui->FLRigPort->text());
+    settings.setValue("TXOffset",      ui->TXOffset->text());
+    txOffset = ui->TXOffset->text().toDouble();
 }
