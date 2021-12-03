@@ -68,7 +68,10 @@ CloudLogCATQt::CloudLogCATQt(QWidget *parent)
     loadSettings();
     txOffset = ui->TXOffset->text().toDouble();
     qDebug() << "TX Offset:" << txOffset << "Hz";
-    realFrequency = 0.0;
+    rxOffset = ui->RXOffset->text().toDouble();
+    qDebug() << "RX Offset:" << rxOffset << "Hz";
+    realTxFrequency = 0.0;
+    realRxFrequency = 0.0;
 
     // Set Status Bar
     ui->statusbar->showMessage("(c) 2020 DL9MJ");
@@ -117,9 +120,14 @@ void CloudLogCATQt::uploadToCloudLog()
     QString str = QString("")
                 + "{"
                 + "\"key\" : \"" + ui->cloudLogKey->text() + "\","
-                + "\"radio\" : \"CloudLogCATQt\" ,"
-                + "\"frequency\" : \"" + QString{ "%1" }.arg( realFrequency, 1, 'f', 0) + "\","
+                + "\"radio\" : \"SatPC32\" ,"
+                + "\"frequency\" : \"" + QString{ "%1" }.arg( realTxFrequency, 1, 'f', 0) + "\","
                 + "\"mode\" : \"" + mode + "\","
+                + "\"uplink_freq\" : \"" + QString{ "%1" }.arg( realTxFrequency, 1, 'f', 0) + "\","
+                + "\"uplink_mode\" : \"" + mode + "\","
+                + "\"downlink_freq\" : \"" + QString{ "%1" }.arg( realRxFrequency, 1, 'f', 0) + "\","
+                + "\"downlink_mode\" : \"" + mode + "\","
+                + "\"sat_name\" : \"QO-100\","
                 + "\"timestamp\" : \"" + currentTime.toString("yyyy/MM/dd hh:mm") + "\""
                 + "}";
     data = str.toUtf8();
@@ -146,6 +154,7 @@ void CloudLogCATQt::loadSettings()
     ui->FLRigHostname->setText(settings.value("FLRigHostname", "localhost").toString());
     ui->FLRigPort->setText(settings.value("FLRigPort", "12345").toString());
     ui->TXOffset->setText(settings.value("TXOffset", "0").toString());
+    ui->RXOffset->setText(settings.value("RXOffset", "0").toString());
 }
 
 void CloudLogCATQt::callbackFrequency(QNetworkReply *rep)
@@ -154,11 +163,14 @@ void CloudLogCATQt::callbackFrequency(QNetworkReply *rep)
 
     if(f != frequency) { // Update UI and Cloudlog
         frequency = f;
-        realFrequency = frequency;
+        realTxFrequency = frequency;
         if (txOffset != 0.0) {
-            realFrequency += txOffset;
+            realTxFrequency += txOffset;
         }
-        ui->lcdNumber->display(QString{ "%1" }.arg(realFrequency/1000.0/1000.0, 6, 'f', 5, '0' ));
+        if (rxOffset != 0.0) {
+            realRxFrequency = frequency + rxOffset;
+        }
+        ui->lcdNumber->display(QString{ "%1" }.arg(realTxFrequency/1000.0/1000.0, 6, 'f', 5, '0' ));
         uploadToCloudLog();
     }
 }
@@ -214,5 +226,7 @@ void CloudLogCATQt::on_save_clicked()
     settings.setValue("FLRigHostname", ui->FLRigHostname->text());
     settings.setValue("FLRigPort",     ui->FLRigPort->text());
     settings.setValue("TXOffset",      ui->TXOffset->text());
+    settings.setValue("RXOffset",      ui->RXOffset->text());
     txOffset = ui->TXOffset->text().toDouble();
+    rxOffset = ui->RXOffset->text().toDouble();
 }
