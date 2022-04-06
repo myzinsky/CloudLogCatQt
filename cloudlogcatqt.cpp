@@ -63,6 +63,12 @@ CloudLogCATQt::CloudLogCATQt(QWidget *parent)
             SLOT(callbackCloudLog(QNetworkReply*))
     );
 
+    QObject::connect(ui->Power,
+	    SIGNAL(valueChanged(int)),
+	    this,
+	    SLOT(callbackPower())
+    );
+
     // Setup Settings File:
     settingsFile = QApplication::applicationDirPath() + "/settings.ini"; 
     loadSettings();
@@ -194,6 +200,12 @@ void CloudLogCATQt::callbackMode(QNetworkReply *rep)
 void CloudLogCATQt::callbackCloudLog(QNetworkReply *rep)
 {
     qDebug () << QString(rep->readAll());
+}
+
+void CloudLogCATQt::callbackPower()
+{
+    power = ui->Power->value();
+    uploadToCloudLog();
 }
 
 void CloudLogCATQt::getFromFLRig(QString command, QNetworkAccessManager *manager)

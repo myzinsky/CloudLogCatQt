@@ -57,6 +57,7 @@ private slots:
     void callbackFrequency(QNetworkReply *rep);
     void callbackMode(QNetworkReply *rep);
     void callbackCloudLog(QNetworkReply *rep);
+    void callbackPower();
 
     void on_save_clicked();
 
