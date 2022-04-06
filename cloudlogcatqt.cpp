@@ -64,10 +64,33 @@ CloudLogCATQt::CloudLogCATQt(QWidget *parent)
     );
 
     QObject::connect(ui->Power,
-	    SIGNAL(valueChanged(int)),
-	    this,
-	    SLOT(callbackPower())
+                     SIGNAL(valueChanged(int)),
+                     this,
+                     SLOT(callbackPower())
     );
+
+    // Setup prop modes
+    propModes = (QStringList()<<""
+                              <<"AS|Aircraft Scatter"
+                              <<"AUE|Aurora-E"
+                              <<"AUR|Aurora"
+                              <<"BS|Back scatter"
+                              <<"ECH|EchoLink"
+                              <<"EME|Earth-Moon-Earth"
+                              <<"ES|Sporadic E"
+                              <<"F2|F2 Reflection"
+                              <<"FAI|Field Aligned Irregularities"
+                              <<"INTERNET|Internet-assisted"
+                              <<"ION|Ionoscatter"
+                              <<"IRL|IRLP"
+                              <<"MS|Meteor scatter"
+                              <<"RPT|Terrestrial or atmospheric repeater or transponder"
+                              <<"RS|Rain scatter"
+                              <<"SAT|Satellite"
+                              <<"TEP|Trans-equatorial"
+                              <<"TR|Tropospheric ducting"
+    );
+    ui->propMode->addItems(propModes);
 
     // Setup Settings File:
     settingsFile = QApplication::applicationDirPath() + "/settings.ini"; 
@@ -78,6 +101,8 @@ CloudLogCATQt::CloudLogCATQt(QWidget *parent)
     qDebug() << "RX Offset:" << rxOffset << "Hz";
     power = ui->Power->value();
     qDebug() << "Power:" << power << "W";
+    propMode = ui->propMode->currentText();
+    qDebug() << "Prop Mode:" << propMode;
     realTxFrequency = 0.0;
     realRxFrequency = 0.0;
 
@@ -135,6 +160,7 @@ void CloudLogCATQt::uploadToCloudLog()
                 + "\"uplink_mode\" : \"" + mode + "\","
                 + "\"downlink_freq\" : \"" + QString{ "%1" }.arg( realRxFrequency, 1, 'f', 0) + "\","
                 + "\"downlink_mode\" : \"" + mode + "\","
+                + "\"prop_mode\" : \"" + propMode + "\","
                 + "\"sat_name\" : \"QO-100\","
                 + "\"power\" : \"" + QString{ "%1" }.arg(power) + "\","
                 + "\"timestamp\" : \"" + currentTime.toString("yyyy/MM/dd hh:mm") + "\""
@@ -165,6 +191,15 @@ void CloudLogCATQt::loadSettings()
     ui->TXOffset->setText(settings.value("TXOffset", "0").toString());
     ui->RXOffset->setText(settings.value("RXOffset", "0").toString());
     ui->Power->setValue(settings.value("Power", "0").toInt());
+    propMode = settings.value("PropMode", "").toString();
+    for (int i=0; i<propModes.size(); i++) {
+            QStringList propIndex = propModes[i].split('|');
+            if (propMode == propIndex[0]) {
+                 propModeDesc = propModes[i];
+            }
+    }
+    int index = ui->propMode->findText(propModeDesc);
+    ui->propMode->setCurrentIndex(index);
 }
 
 void CloudLogCATQt::callbackFrequency(QNetworkReply *rep)
@@ -238,6 +273,8 @@ void CloudLogCATQt::on_save_clicked()
     qDebug() << "SAVE";
     QSettings settings(settingsFile, QSettings::NativeFormat);
 
+    propModeDesc = ui->propMode->currentText();
+    QStringList propMode = propModeDesc.split('|');
     settings.setValue("cloudLogUrl",   ui->cloudLogUrl->text());
     settings.setValue("cloudLogKey",   ui->cloudLogKey->text());
     settings.setValue("FLRigHostname", ui->FLRigHostname->text());
@@ -245,6 +282,7 @@ void CloudLogCATQt::on_save_clicked()
     settings.setValue("TXOffset",      ui->TXOffset->text());
     settings.setValue("RXOffset",      ui->RXOffset->text());
     settings.setValue("Power",         ui->Power->text());
+    settings.setValue("PropMode",      propMode[0]);
     txOffset = ui->TXOffset->text().toDouble();
     rxOffset = ui->RXOffset->text().toDouble();
 }

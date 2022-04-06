@@ -78,6 +78,9 @@ private:
     double realTxFrequency;
     double realRxFrequency;
     QString mode;
+    QString propModeDesc;
+    QString propMode;
+    QStringList propModes;
     double txOffset;
     double rxOffset;
     int power;

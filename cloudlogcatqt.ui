@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>431</height>
+    <height>440</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -80,7 +80,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="label_6">
         <property name="text">
-         <string>TX LO Offset (Hz)</string>
+         <string>TX LO Offset (Hz):</string>
         </property>
        </widget>
       </item>
@@ -97,7 +97,7 @@
       <item row="1" column="1">
        <widget class="QLineEdit" name="RXOffset"/>
       </item>
-      <item row="3" column="0">
+      <item row="4" column="0">
        <widget class="QLabel" name="label_1">
         <property name="maximumSize">
          <size>
@@ -110,7 +110,7 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="1">
+      <item row="4" column="1">
        <widget class="QLineEdit" name="FLRigHostname">
         <property name="sizePolicy">
          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
@@ -123,7 +123,7 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="0">
+      <item row="5" column="0">
        <widget class="QLabel" name="label_2">
         <property name="maximumSize">
          <size>
@@ -136,14 +136,14 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="1">
+      <item row="5" column="1">
        <widget class="QLineEdit" name="FLRigPort">
         <property name="text">
          <string/>
         </property>
        </widget>
       </item>
-      <item row="5" column="0">
+      <item row="6" column="0">
        <widget class="QLabel" name="label_3">
         <property name="maximumSize">
          <size>
@@ -156,14 +156,14 @@
         </property>
        </widget>
       </item>
-      <item row="5" column="1">
+      <item row="6" column="1">
        <widget class="QLineEdit" name="cloudLogUrl">
         <property name="text">
          <string/>
         </property>
        </widget>
       </item>
-      <item row="6" column="0">
+      <item row="7" column="0">
        <widget class="QLabel" name="label_4">
         <property name="maximumSize">
          <size>
@@ -182,7 +182,7 @@
         </property>
        </widget>
       </item>
-      <item row="6" column="1">
+      <item row="7" column="1">
        <widget class="QLineEdit" name="cloudLogKey">
         <property name="text">
          <string/>
@@ -199,9 +199,19 @@
       <item row="2" column="0">
        <widget class="QLabel" name="label_7">
         <property name="text">
-         <string>Power (W)</string>
+         <string>Power (W):</string>
         </property>
        </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_8">
+        <property name="text">
+         <string>Propagation Mode:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QComboBox" name="propMode"/>
       </item>
      </layout>
     </item>
