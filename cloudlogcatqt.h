@@ -79,6 +79,7 @@ private:
     QString mode;
     double txOffset;
     double rxOffset;
+    int power;
 
     QString settingsFile;
 

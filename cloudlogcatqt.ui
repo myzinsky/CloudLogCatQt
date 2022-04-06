@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>404</height>
+    <height>431</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -77,6 +77,16 @@
       <property name="formAlignment">
        <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
       </property>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>TX LO Offset (Hz)</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="TXOffset"/>
+      </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_5">
         <property name="text">
@@ -87,7 +97,7 @@
       <item row="1" column="1">
        <widget class="QLineEdit" name="RXOffset"/>
       </item>
-      <item row="2" column="0">
+      <item row="3" column="0">
        <widget class="QLabel" name="label_1">
         <property name="maximumSize">
          <size>
@@ -100,7 +110,7 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
+      <item row="3" column="1">
        <widget class="QLineEdit" name="FLRigHostname">
         <property name="sizePolicy">
          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
@@ -113,7 +123,7 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="0">
+      <item row="4" column="0">
        <widget class="QLabel" name="label_2">
         <property name="maximumSize">
          <size>
@@ -126,14 +136,14 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="1">
+      <item row="4" column="1">
        <widget class="QLineEdit" name="FLRigPort">
         <property name="text">
          <string/>
         </property>
        </widget>
       </item>
-      <item row="4" column="0">
+      <item row="5" column="0">
        <widget class="QLabel" name="label_3">
         <property name="maximumSize">
          <size>
@@ -146,14 +156,14 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="1">
+      <item row="5" column="1">
        <widget class="QLineEdit" name="cloudLogUrl">
         <property name="text">
          <string/>
         </property>
        </widget>
       </item>
-      <item row="5" column="0">
+      <item row="6" column="0">
        <widget class="QLabel" name="label_4">
         <property name="maximumSize">
          <size>
@@ -172,20 +182,24 @@
         </property>
        </widget>
       </item>
-      <item row="5" column="1">
+      <item row="6" column="1">
        <widget class="QLineEdit" name="cloudLogKey">
         <property name="text">
          <string/>
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
-       <widget class="QLineEdit" name="TXOffset"/>
+      <item row="2" column="1">
+       <widget class="QSpinBox" name="Power">
+        <property name="maximum">
+         <number>10000</number>
+        </property>
+       </widget>
       </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_6">
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_7">
         <property name="text">
-         <string>TX LO Offset (Hz)</string>
+         <string>Power (W)</string>
         </property>
        </widget>
       </item>

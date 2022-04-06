@@ -70,6 +70,8 @@ CloudLogCATQt::CloudLogCATQt(QWidget *parent)
     qDebug() << "TX Offset:" << txOffset << "Hz";
     rxOffset = ui->RXOffset->text().toDouble();
     qDebug() << "RX Offset:" << rxOffset << "Hz";
+    power = ui->Power->value();
+    qDebug() << "Power:" << power << "W";
     realTxFrequency = 0.0;
     realRxFrequency = 0.0;
 
@@ -120,7 +122,7 @@ void CloudLogCATQt::uploadToCloudLog()
     QString str = QString("")
                 + "{"
                 + "\"key\" : \"" + ui->cloudLogKey->text() + "\","
-                + "\"radio\" : \"SatPC32\" ,"
+                + "\"radio\" : \"CloudLogCATQt\" ,"
                 + "\"frequency\" : \"" + QString{ "%1" }.arg( realTxFrequency, 1, 'f', 0) + "\","
                 + "\"mode\" : \"" + mode + "\","
                 + "\"uplink_freq\" : \"" + QString{ "%1" }.arg( realTxFrequency, 1, 'f', 0) + "\","
@@ -128,6 +130,7 @@ void CloudLogCATQt::uploadToCloudLog()
                 + "\"downlink_freq\" : \"" + QString{ "%1" }.arg( realRxFrequency, 1, 'f', 0) + "\","
                 + "\"downlink_mode\" : \"" + mode + "\","
                 + "\"sat_name\" : \"QO-100\","
+                + "\"power\" : \"" + QString{ "%1" }.arg(power) + "\","
                 + "\"timestamp\" : \"" + currentTime.toString("yyyy/MM/dd hh:mm") + "\""
                 + "}";
     data = str.toUtf8();
@@ -155,6 +158,7 @@ void CloudLogCATQt::loadSettings()
     ui->FLRigPort->setText(settings.value("FLRigPort", "12345").toString());
     ui->TXOffset->setText(settings.value("TXOffset", "0").toString());
     ui->RXOffset->setText(settings.value("RXOffset", "0").toString());
+    ui->Power->setValue(settings.value("Power", "0").toInt());
 }
 
 void CloudLogCATQt::callbackFrequency(QNetworkReply *rep)
@@ -163,6 +167,7 @@ void CloudLogCATQt::callbackFrequency(QNetworkReply *rep)
 
     if(f != frequency) { // Update UI and Cloudlog
         frequency = f;
+        power = ui->Power->value();
         realTxFrequency = frequency;
         if (txOffset != 0.0) {
             realTxFrequency += txOffset;
@@ -227,6 +232,7 @@ void CloudLogCATQt::on_save_clicked()
     settings.setValue("FLRigPort",     ui->FLRigPort->text());
     settings.setValue("TXOffset",      ui->TXOffset->text());
     settings.setValue("RXOffset",      ui->RXOffset->text());
+    settings.setValue("Power",         ui->Power->text());
     txOffset = ui->TXOffset->text().toDouble();
     rxOffset = ui->RXOffset->text().toDouble();
 }
