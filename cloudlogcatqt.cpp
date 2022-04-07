@@ -75,6 +75,12 @@ CloudLogCATQt::CloudLogCATQt(QWidget *parent)
 		    SLOT(callbackPropMode())
     );
 
+    QObject::connect(ui->satellite,
+		    SIGNAL(currentTextChanged(QString)),
+		    this,
+		    SLOT(callbackSatellite())
+    );
+
     // Setup prop modes
     propModes = (QStringList()<<""
                               <<"AS|Aircraft Scatter"
@@ -98,6 +104,25 @@ CloudLogCATQt::CloudLogCATQt(QWidget *parent)
     );
     ui->propMode->addItems(propModes);
 
+    // Setup satellite names
+    QFile file("sat.dat");
+    QTextStream stream(&file);
+    QString line;
+
+    if(file.open (QIODevice::ReadOnly | QIODevice::Text))
+    {
+	    while (!stream.atEnd())
+	    {
+		    line = stream.readLine ();
+		    if(!line.isNull ())
+		    {
+			    ui->satellite->addItem(line);
+		    }
+	    }
+	    stream.flush();
+	    file.close();
+    }
+
     // Setup Settings File:
     settingsFile = QApplication::applicationDirPath() + "/settings.ini"; 
     loadSettings();
@@ -110,6 +135,9 @@ CloudLogCATQt::CloudLogCATQt(QWidget *parent)
     propModeDesc = ui->propMode->currentText();
     propMode = propModeDesc.split('|');
     qDebug() << "Prop Mode:" << propMode[0];
+    satelliteDesc = ui->satellite->currentText();
+    satellite = satelliteDesc.split('|');
+    qDebug() << "Sat:" << satellite[0];
     realTxFrequency = 0.0;
     realRxFrequency = 0.0;
 
@@ -254,7 +282,18 @@ void CloudLogCATQt::callbackPower()
 void CloudLogCATQt::callbackPropMode()
 {
     propModeDesc = ui->propMode->currentText();
+    QStringList temp = propModeDesc.split('|');
+    if (temp[0] == "SAT") {
+	    ui->satellite->setEnabled(true);
+    } else {
+	    ui->satellite->setEnabled(false);
+    }
     uploadToCloudLog();
+}
+
+void CloudLogCATQt::callbackSatellite()
+{
+	qDebug() << "Sat:" << ui->satellite->currentText();
 }
 
 void CloudLogCATQt::getFromFLRig(QString command, QNetworkAccessManager *manager)
@@ -289,6 +328,8 @@ void CloudLogCATQt::on_save_clicked()
 
     propModeDesc = ui->propMode->currentText();
     QStringList propMode = propModeDesc.split('|');
+    satelliteDesc = ui->satellite->currentText();
+    QStringList satellite = satelliteDesc.split('|');
     settings.setValue("cloudLogUrl",   ui->cloudLogUrl->text());
     settings.setValue("cloudLogKey",   ui->cloudLogKey->text());
     settings.setValue("FLRigHostname", ui->FLRigHostname->text());
@@ -297,6 +338,7 @@ void CloudLogCATQt::on_save_clicked()
     settings.setValue("RXOffset",      ui->RXOffset->text());
     settings.setValue("Power",         ui->Power->text());
     settings.setValue("PropMode",      propMode[0]);
+    settings.setValue("Sat",           satellite[0]);
     txOffset = ui->TXOffset->text().toDouble();
     rxOffset = ui->RXOffset->text().toDouble();
 }
