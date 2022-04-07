@@ -87,6 +87,7 @@ private:
     QStringList propModes;
     QStringList satNames;
     QString satelliteDesc;
+    QString satelliteShort;
     QStringList satellite;
     double txOffset;
     double rxOffset;

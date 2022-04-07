@@ -108,6 +108,7 @@ CloudLogCATQt::CloudLogCATQt(QWidget *parent)
     QFile file("sat.dat");
     QTextStream stream(&file);
     QString line;
+    satNames.append("");
 
     if(file.open (QIODevice::ReadOnly | QIODevice::Text))
     {
@@ -116,12 +117,13 @@ CloudLogCATQt::CloudLogCATQt(QWidget *parent)
 		    line = stream.readLine ();
 		    if(!line.isNull ())
 		    {
-			    ui->satellite->addItem(line);
+			    satNames.append(line);
 		    }
 	    }
 	    stream.flush();
 	    file.close();
     }
+    ui->satellite->addItems(satNames);
 
     // Setup Settings File:
     settingsFile = QApplication::applicationDirPath() + "/settings.ini"; 
@@ -186,6 +188,7 @@ void CloudLogCATQt::uploadToCloudLog()
     QByteArray data;
 
     propMode = propModeDesc.split('|');
+    satellite = satelliteDesc.split('|');
     QString str = QString("")
                 + "{"
                 + "\"key\" : \"" + ui->cloudLogKey->text() + "\","
@@ -197,7 +200,7 @@ void CloudLogCATQt::uploadToCloudLog()
                 + "\"downlink_freq\" : \"" + QString{ "%1" }.arg( realRxFrequency, 1, 'f', 0) + "\","
                 + "\"downlink_mode\" : \"" + mode + "\","
                 + "\"prop_mode\" : \"" + propMode[0] + "\","
-                + "\"sat_name\" : \"QO-100\","
+                + "\"sat_name\" : \"" + satellite[0] + "\","
                 + "\"power\" : \"" + QString{ "%1" }.arg(power) + "\","
                 + "\"timestamp\" : \"" + currentTime.toString("yyyy/MM/dd hh:mm") + "\""
                 + "}";
@@ -236,6 +239,16 @@ void CloudLogCATQt::loadSettings()
     }
     int index = ui->propMode->findText(propModeDesc);
     ui->propMode->setCurrentIndex(index);
+
+    satelliteShort = settings.value("Sat", "").toString();
+    for (int i=0; i<satNames.size(); i++) {
+            QStringList temp = satNames[i].split('|');
+            if (satelliteShort == temp[0]) {
+                 satelliteDesc = satNames[i];
+            }
+    }
+    index = ui->satellite->findText(satelliteDesc);
+    ui->satellite->setCurrentIndex(index);
 }
 
 void CloudLogCATQt::callbackFrequency(QNetworkReply *rep)
@@ -293,7 +306,8 @@ void CloudLogCATQt::callbackPropMode()
 
 void CloudLogCATQt::callbackSatellite()
 {
-	qDebug() << "Sat:" << ui->satellite->currentText();
+    satelliteDesc = ui->satellite->currentText();
+    uploadToCloudLog();
 }
 
 void CloudLogCATQt::getFromFLRig(QString command, QNetworkAccessManager *manager)
