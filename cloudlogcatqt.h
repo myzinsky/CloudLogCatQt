@@ -58,6 +58,7 @@ private slots:
     void callbackMode(QNetworkReply *rep);
     void callbackCloudLog(QNetworkReply *rep);
     void callbackPower();
+    void callbackPropMode();
 
     void on_save_clicked();
 
@@ -79,7 +80,8 @@ private:
     double realRxFrequency;
     QString mode;
     QString propModeDesc;
-    QString propMode;
+    QString propModeShort;
+    QStringList propMode;
     QStringList propModes;
     double txOffset;
     double rxOffset;

@@ -69,6 +69,12 @@ CloudLogCATQt::CloudLogCATQt(QWidget *parent)
                      SLOT(callbackPower())
     );
 
+    QObject::connect(ui->propMode,
+		    SIGNAL(currentTextChanged(QString)),
+		    this,
+		    SLOT(callbackPropMode())
+    );
+
     // Setup prop modes
     propModes = (QStringList()<<""
                               <<"AS|Aircraft Scatter"
@@ -101,8 +107,9 @@ CloudLogCATQt::CloudLogCATQt(QWidget *parent)
     qDebug() << "RX Offset:" << rxOffset << "Hz";
     power = ui->Power->value();
     qDebug() << "Power:" << power << "W";
-    propMode = ui->propMode->currentText();
-    qDebug() << "Prop Mode:" << propMode;
+    propModeDesc = ui->propMode->currentText();
+    propMode = propModeDesc.split('|');
+    qDebug() << "Prop Mode:" << propMode[0];
     realTxFrequency = 0.0;
     realRxFrequency = 0.0;
 
@@ -150,6 +157,7 @@ void CloudLogCATQt::uploadToCloudLog()
     QDateTime currentTime = QDateTime::currentDateTime();
     QByteArray data;
 
+    propMode = propModeDesc.split('|');
     QString str = QString("")
                 + "{"
                 + "\"key\" : \"" + ui->cloudLogKey->text() + "\","
@@ -160,7 +168,7 @@ void CloudLogCATQt::uploadToCloudLog()
                 + "\"uplink_mode\" : \"" + mode + "\","
                 + "\"downlink_freq\" : \"" + QString{ "%1" }.arg( realRxFrequency, 1, 'f', 0) + "\","
                 + "\"downlink_mode\" : \"" + mode + "\","
-                + "\"prop_mode\" : \"" + propMode + "\","
+                + "\"prop_mode\" : \"" + propMode[0] + "\","
                 + "\"sat_name\" : \"QO-100\","
                 + "\"power\" : \"" + QString{ "%1" }.arg(power) + "\","
                 + "\"timestamp\" : \"" + currentTime.toString("yyyy/MM/dd hh:mm") + "\""
@@ -191,10 +199,10 @@ void CloudLogCATQt::loadSettings()
     ui->TXOffset->setText(settings.value("TXOffset", "0").toString());
     ui->RXOffset->setText(settings.value("RXOffset", "0").toString());
     ui->Power->setValue(settings.value("Power", "0").toInt());
-    propMode = settings.value("PropMode", "").toString();
+    propModeShort = settings.value("PropMode", "").toString();
     for (int i=0; i<propModes.size(); i++) {
-            QStringList propIndex = propModes[i].split('|');
-            if (propMode == propIndex[0]) {
+            QStringList temp = propModes[i].split('|');
+            if (propModeShort == temp[0]) {
                  propModeDesc = propModes[i];
             }
     }
@@ -240,6 +248,12 @@ void CloudLogCATQt::callbackCloudLog(QNetworkReply *rep)
 void CloudLogCATQt::callbackPower()
 {
     power = ui->Power->value();
+    uploadToCloudLog();
+}
+
+void CloudLogCATQt::callbackPropMode()
+{
+    propModeDesc = ui->propMode->currentText();
     uploadToCloudLog();
 }
 
