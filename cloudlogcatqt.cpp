@@ -193,15 +193,25 @@ void CloudLogCATQt::uploadToCloudLog()
                 + "{"
                 + "\"key\" : \"" + ui->cloudLogKey->text() + "\","
                 + "\"radio\" : \"CloudLogCATQt\" ,"
-                + "\"frequency\" : \"" + QString{ "%1" }.arg( realTxFrequency, 1, 'f', 0) + "\","
-                + "\"mode\" : \"" + mode + "\","
-                + "\"uplink_freq\" : \"" + QString{ "%1" }.arg( realTxFrequency, 1, 'f', 0) + "\","
-                + "\"uplink_mode\" : \"" + mode + "\","
-                + "\"downlink_freq\" : \"" + QString{ "%1" }.arg( realRxFrequency, 1, 'f', 0) + "\","
-                + "\"downlink_mode\" : \"" + mode + "\","
-                + "\"prop_mode\" : \"" + propMode[0] + "\","
-                + "\"sat_name\" : \"" + satellite[0] + "\","
-                + "\"power\" : \"" + QString{ "%1" }.arg(power) + "\","
+                + "\"prop_mode\" : \"" + propMode[0] + "\",";
+    		if (propMode[0] == "SAT") {
+			str += "\"sat_name\" : \"" + satellite[0] + "\","
+                            + "\"uplink_freq\" : \"" + QString{ "%1" }.arg( realTxFrequency, 1, 'f', 0) + "\","
+                            + "\"uplink_mode\" : \"" + mode + "\","
+                            + "\"downlink_freq\" : \"" + QString{ "%1" }.arg( realRxFrequency, 1, 'f', 0) + "\","
+                            + "\"downlink_mode\" : \"" + mode + "\","
+                            + "\"frequency\" : \"NULL\","
+                            + "\"mode\" : \"NULL\",";
+		} else {
+			str += "\"sat_name\" : \"" + satellite[0] + "\","
+                            + "\"uplink_freq\" : \"NULL\","
+                            + "\"uplink_mode\" : \"NULL\","
+                            + "\"downlink_freq\" : \"NULL\","
+                            + "\"downlink_mode\" : \"NULL\","
+                            + "\"frequency\" : \"" + QString{ "%1" }.arg( realTxFrequency, 1, 'f', 0) + "\","
+                            + "\"mode\" : \"" + mode + "\",";
+		}
+		str += "\"power\" : \"" + QString{ "%1" }.arg(power) + "\","
                 + "\"timestamp\" : \"" + currentTime.toString("yyyy/MM/dd hh:mm") + "\""
                 + "}";
     data = str.toUtf8();
