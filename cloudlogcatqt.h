@@ -40,6 +40,7 @@
 #include <QXmlStreamReader>
 #include <QNetworkReply>
 #include <QSettings>
+#include <QFile>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class CloudLogCATQt; }
@@ -57,6 +58,9 @@ private slots:
     void callbackFrequency(QNetworkReply *rep);
     void callbackMode(QNetworkReply *rep);
     void callbackCloudLog(QNetworkReply *rep);
+    void callbackPower();
+    void callbackPropMode();
+    void callbackSatellite();
 
     void on_save_clicked();
 
@@ -74,9 +78,20 @@ private:
     QNetworkAccessManager *modeManager;
     QNetworkAccessManager *cloudLogManager;
     double frequency;
-    double realFrequency;
+    double realTxFrequency;
+    double realRxFrequency;
     QString mode;
+    QString propModeDesc;
+    QString propModeShort;
+    QStringList propMode;
+    QStringList propModes;
+    QStringList satNames;
+    QString satelliteDesc;
+    QString satelliteShort;
+    QStringList satellite;
     double txOffset;
+    double rxOffset;
+    int power;
 
     QString settingsFile;
 
