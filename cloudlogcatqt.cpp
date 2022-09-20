@@ -193,6 +193,7 @@ void CloudLogCATQt::uploadToCloudLog()
                 + "{"
                 + "\"key\" : \"" + ui->cloudLogKey->text() + "\","
                 + "\"radio\" : \"CloudLogCATQt\" ,"
+                + "\"identifier\" : \"" + ui->cloudLogIdentifier->text() + "\","
                 + "\"prop_mode\" : \"" + propMode[0] + "\",";
     		if (propMode[0] == "SAT") {
 			str += "\"sat_name\" : \"" + satellite[0] + "\","
@@ -235,6 +236,7 @@ void CloudLogCATQt::loadSettings()
 
     ui->cloudLogUrl->setText(settings.value("cloudLogUrl","").toString());
     ui->cloudLogKey->setText(settings.value("cloudLogKey","").toString());
+    ui->cloudLogIdentifier->setText(settings.value("cloudLogIdentifier","").toString());
     ui->FLRigHostname->setText(settings.value("FLRigHostname", "localhost").toString());
     ui->FLRigPort->setText(settings.value("FLRigPort", "12345").toString());
     ui->TXOffset->setText(settings.value("TXOffset", "0").toString());
@@ -354,15 +356,16 @@ void CloudLogCATQt::on_save_clicked()
     QStringList propMode = propModeDesc.split('|');
     satelliteDesc = ui->satellite->currentText();
     QStringList satellite = satelliteDesc.split('|');
-    settings.setValue("cloudLogUrl",   ui->cloudLogUrl->text());
-    settings.setValue("cloudLogKey",   ui->cloudLogKey->text());
-    settings.setValue("FLRigHostname", ui->FLRigHostname->text());
-    settings.setValue("FLRigPort",     ui->FLRigPort->text());
-    settings.setValue("TXOffset",      ui->TXOffset->text());
-    settings.setValue("RXOffset",      ui->RXOffset->text());
-    settings.setValue("Power",         ui->Power->text());
-    settings.setValue("PropMode",      propMode[0]);
-    settings.setValue("Sat",           satellite[0]);
+    settings.setValue("cloudLogUrl",         ui->cloudLogUrl->text());
+    settings.setValue("cloudLogKey",         ui->cloudLogKey->text());
+    settings.setValue("cloudLogIdentifier",  ui->cloudLogIdentifier->text());
+    settings.setValue("FLRigHostname",       ui->FLRigHostname->text());
+    settings.setValue("FLRigPort",           ui->FLRigPort->text());
+    settings.setValue("TXOffset",            ui->TXOffset->text());
+    settings.setValue("RXOffset",            ui->RXOffset->text());
+    settings.setValue("Power",               ui->Power->text());
+    settings.setValue("PropMode",            propMode[0]);
+    settings.setValue("Sat",                 satellite[0]);
     txOffset = ui->TXOffset->text().toDouble();
     rxOffset = ui->RXOffset->text().toDouble();
 }

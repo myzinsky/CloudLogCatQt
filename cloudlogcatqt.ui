@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>415</width>
-    <height>471</height>
+    <height>515</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -239,6 +239,16 @@
        <widget class="QLineEdit" name="cloudLogKey">
         <property name="text">
          <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="1">
+       <widget class="QLineEdit" name="cloudLogIdentifier"/>
+      </item>
+      <item row="9" column="0">
+       <widget class="QLabel" name="label_10">
+        <property name="text">
+         <string>Cloudlog Identifier:</string>
         </property>
        </widget>
       </item>
