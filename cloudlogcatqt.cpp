@@ -145,6 +145,24 @@ CloudLogCATQt::CloudLogCATQt(QWidget *parent)
 
     // Set Status Bar
     ui->statusbar->showMessage("(c) 2020 DL9MJ");
+
+    // Set Placeholders
+    ui->cloudLogUrl->setPlaceholderText("https://yourdomain.com/index.php/api/radio");
+    ui->cloudLogKey->setPlaceholderText("cl632adab771259");
+    ui->cloudLogIdentifier->setPlaceholderText("Rig Name");
+    ui->FLRigHostname->setPlaceholderText("localhost");
+    ui->FLRigPort->setPlaceholderText("12345");
+    ui->TXOffset->setPlaceholderText("0");
+    ui->RXOffset->setPlaceholderText("0");
+
+    // Set Input Constraints
+    QRegExp identifierRe("[ \\w\\d-_#]{0,50}");
+    QRegExpValidator *idValidator = new QRegExpValidator(identifierRe, this);
+    ui->cloudLogIdentifier->setValidator(idValidator);
+    QRegExp loRe("\\d*");
+    QRegExpValidator *loValidator = new QRegExpValidator(loRe, this);
+    ui->TXOffset->setValidator(loValidator);
+    ui->RXOffset->setValidator(loValidator);
 }
 
 CloudLogCATQt::~CloudLogCATQt()
@@ -191,28 +209,28 @@ void CloudLogCATQt::uploadToCloudLog()
     satellite = satelliteDesc.split('|');
     QString str = QString("")
                 + "{"
-                + "\"key\" : \"" + ui->cloudLogKey->text() + "\","
+                + "\"key\" : \"" + ui->cloudLogKey->text() + "\" ,"
                 + "\"radio\" : \"CloudLogCATQt\" ,"
-                + "\"identifier\" : \"" + ui->cloudLogIdentifier->text() + "\","
-                + "\"prop_mode\" : \"" + propMode[0] + "\",";
+                + "\"identifier\" : \"" + ui->cloudLogIdentifier->text() + "\" ,"
+                + "\"prop_mode\" : \"" + propMode[0] + "\" ,";
     		if (propMode[0] == "SAT") {
-			str += "\"sat_name\" : \"" + satellite[0] + "\","
-                            + "\"uplink_freq\" : \"" + QString{ "%1" }.arg( realTxFrequency, 1, 'f', 0) + "\","
-                            + "\"uplink_mode\" : \"" + mode + "\","
-                            + "\"downlink_freq\" : \"" + QString{ "%1" }.arg( realRxFrequency, 1, 'f', 0) + "\","
-                            + "\"downlink_mode\" : \"" + mode + "\","
-                            + "\"frequency\" : \"NULL\","
-                            + "\"mode\" : \"NULL\",";
+			str += "\"sat_name\" : \"" + satellite[0] + "\" ,"
+                            + "\"uplink_freq\" : \"" + QString{ "%1" }.arg( realTxFrequency, 1, 'f', 0) + "\" ,"
+                            + "\"uplink_mode\" : \"" + mode + "\" ,"
+                            + "\"downlink_freq\" : \"" + QString{ "%1" }.arg( realRxFrequency, 1, 'f', 0) + "\" ,"
+                            + "\"downlink_mode\" : \"" + mode + "\" ,"
+                            + "\"frequency\" : \"NULL\" ,"
+                            + "\"mode\" : \"NULL\" ,";
 		} else {
-			str += "\"sat_name\" : \"" + satellite[0] + "\","
-                            + "\"uplink_freq\" : \"NULL\","
-                            + "\"uplink_mode\" : \"NULL\","
-                            + "\"downlink_freq\" : \"NULL\","
-                            + "\"downlink_mode\" : \"NULL\","
-                            + "\"frequency\" : \"" + QString{ "%1" }.arg( realTxFrequency, 1, 'f', 0) + "\","
-                            + "\"mode\" : \"" + mode + "\",";
+			str += "\"sat_name\" : \"" + satellite[0] + "\" ,"
+                            + "\"uplink_freq\" : \"NULL\" ,"
+                            + "\"uplink_mode\" : \"NULL\" ,"
+                            + "\"downlink_freq\" : \"NULL\" ,"
+                            + "\"downlink_mode\" : \"NULL\" ,"
+                            + "\"frequency\" : \"" + QString{ "%1" }.arg( realTxFrequency, 1, 'f', 0) + "\" ,"
+                            + "\"mode\" : \"" + mode + "\" ,";
 		}
-		str += "\"power\" : \"" + QString{ "%1" }.arg(power) + "\","
+		str += "\"power\" : \"" + QString{ "%1" }.arg(power) + "\" ,"
                 + "\"timestamp\" : \"" + currentTime.toString("yyyy/MM/dd hh:mm") + "\""
                 + "}";
     data = str.toUtf8();
