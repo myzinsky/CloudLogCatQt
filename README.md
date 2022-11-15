@@ -2,7 +2,20 @@
 Qt app that can be compiled on  Linux, Windows or Mac for providing CAT support for Cloudlog (http://www.cloudlog.co.uk/).
 The app uses a connection to FlRig (http://www.w1hkj.com)
 
-# Build (Linux)
+# Table of Contents
+
+- [CloudLogCatQt](#cloudlogcatqt)
+- [Table of Contents](#table-of-contents)
+- [Build](#build)
+  - [Linux](#linux)
+  - [Windows](#windows)
+- [Settings](#settings)
+  - [MacOS:](#macos)
+  - [Windows](#windows-1)
+
+# Build
+
+## Linux
 
 ```bash
 apt install qt5-default
