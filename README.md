@@ -35,14 +35,15 @@ For building CloudLogCatQt on Windows 10 follow the steps below.
 1. Install [Chocolatey] (The Package Manager For Windows)
 2. Open an elevated PowerShell and run  
     `choco install -y qt5-default cmake qtcreator`
-3. Start _QT Creator_
-4. Open project file [CloudLogCatQt.pro]()
-5. Change the projects build settings for _Release_ and add a _Custom Process Step_
+3. Clone this repository
+4. Start _QT Creator_
+5. Open project file [CloudLogCatQt.pro]()
+6. Change the projects build settings for _Release_ and add a _Custom Process Step_
      - Command: `%{Qt:QT_INSTALL_BINS}\windeployqt.exe`
     - Arguments: `%{buildDir}\release`
     - Working directory: `%{buildDir}\release`
-6. Click on _Build Project_ [`CTRL+B`]
-7. The release and all it's dependencies should now be located in the _Build directory_ as defined in the Projects Build Settings (e.g. in _build-CloudLogCatQt-Desktop-Release/release_ next to your project)
+7. Click on _Build Project_ [`CTRL+B`]
+8. The release and all it's dependencies should now be located in the _Build directory_ as defined in the Projects Build Settings (e.g. in _build-CloudLogCatQt-Desktop-Release/release_ next to your project)
 
 _Read more on the deployment process: [Qt for Windows - Deployment]_
 
