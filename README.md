@@ -5,19 +5,19 @@ The app uses a connection to FlRig (http://www.w1hkj.com)
 
 _The app is still in development and therefore it can not be considered as fully stable._
 
-# Table of Contents
+## Table of Contents
 
 - [CloudLogCatQt](#cloudlogcatqt)
-- [Table of Contents](#table-of-contents)
-- [Build](#build)
-  - [Linux](#linux)
-  - [Windows](#windows)
-- [Settings](#settings)
-- [Screenshots](#screenshots)
+  - [Table of Contents](#table-of-contents)
+  - [Build](#build)
+    - [Linux](#linux)
+    - [Windows](#windows)
+  - [Settings](#settings)
+  - [Screenshots](#screenshots)
 
-# Build
+## Build
 
-## Linux
+### Linux
 
 ```bash
 apt install qt5-default
@@ -29,7 +29,7 @@ qmake ../CloudLogCatQt.pro
 make -j4
 ```
 
-## Windows
+### Windows
 
 For building CloudLogCatQt on Windows 10 follow the steps below.
 
@@ -48,11 +48,11 @@ For building CloudLogCatQt on Windows 10 follow the steps below.
 
 _Read more on the deployment process: [Qt for Windows - Deployment]_
 
-# Settings
+## Settings
 
 The settings are almost self explaining. According to https://github.com/magicbug/Cloudlog/wiki/API create an API key and fill this together with your CloudLog URL e.g. ```https://<CloudLogServer>/index.php/api/radio``` into the settings pane. Furthermore, add the conneciton to FlRig. The default settings are ```localhost``` and the port ```12345```
 
-# Screenshots
+## Screenshots
 
 **macOS**
 
