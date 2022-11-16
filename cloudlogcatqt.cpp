@@ -231,7 +231,7 @@ void CloudLogCATQt::uploadToCloudLog()
 void CloudLogCATQt::loadSettings()
 {
     qDebug() << "LOAD";
-    QSettings settings(settingsFile, QSettings::NativeFormat);
+    QSettings settings(settingsFile, QSettings::IniFormat);
 
     ui->cloudLogUrl->setText(settings.value("cloudLogUrl","").toString());
     ui->cloudLogKey->setText(settings.value("cloudLogKey","").toString());
@@ -348,7 +348,7 @@ void CloudLogCATQt::getMode()
 void CloudLogCATQt::on_save_clicked()
 {
     qDebug() << "SAVE";
-    QSettings settings(settingsFile, QSettings::NativeFormat);
+    QSettings settings(settingsFile, QSettings::IniFormat);
 
     propModeDesc = ui->propMode->currentText();
     QStringList propMode = propModeDesc.split('|');
