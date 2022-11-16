@@ -11,6 +11,8 @@ _The app is still in development and therefore it can not be considered as fully
   - [Table of Contents](#table-of-contents)
   - [Build](#build)
     - [Linux](#linux)
+    - [macOS](#macos)
+      - [Side Notes](#side-notes)
     - [Windows](#windows)
   - [Settings](#settings)
   - [Screenshots](#screenshots)
@@ -28,6 +30,38 @@ cd build
 qmake ../CloudLogCatQt.pro
 make -j4
 ```
+
+### macOS
+
+1. Install [Homebrew]
+2. Open a Terminal
+3. Run `brew install qt@5`
+4. Clone this repository and _cd_ into it
+5. `mkdir build`
+6. `cd build`
+7. `/usr/local/opt/qt@5/bin/qmake ../CloudLogCatQt.pro`
+8. `make -j4`
+
+
+#### Side Notes 
+
+After successfully installing [Homebrew], take a look at the output in the terminal. You'll find a "Caveats" block having some information on the installation paths of Qt5. Maybe you have to adapt Step 7 to your needs.
+
+_Terminal output example:_
+
+    Caveats
+    We agreed to the Qt open source license for you.
+    If this is unacceptable you should uninstall.
+
+    qt@5 is keg-only, which means it was not symlinked into /usr/local,
+    because this is an alternate version of another formula.
+
+    If you need to have qt@5 first in your PATH, run:
+      echo 'export PATH="/usr/local/opt/qt@5/bin:$PATH"' >> /Users/michael/.bash_profile
+
+    For compilers to find qt@5 you may need to set:
+      export LDFLAGS="-L/usr/local/opt/qt@5/lib"
+      export CPPFLAGS="-I/usr/local/opt/qt@5/include"
 
 ### Windows
 
@@ -65,4 +99,5 @@ The settings are almost self explaining. According to https://github.com/magicbu
 
 
 [Chocolatey]: https://chocolatey.org/install
+[Homebrew]: https://brew.sh
 [Qt for Windows - Deployment]: https://doc.qt.io/qt-5/windows-deployment.html
