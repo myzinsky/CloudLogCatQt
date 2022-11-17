@@ -1,0 +1,69 @@
+name: Build Windows Release
+on:
+  push:
+    branches:
+    - main
+    - master
+
+env:
+  QT_VERSION: 5.15.2
+  
+jobs:
+  build-windows:
+    runs-on: windows-2019
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Add short SHA to env
+      run: echo "GITHUB_SHA_SHORT=$(echo $env:GITHUB_SHA | cut -c 1-6)" >> $env:GITHUB_ENV
+
+    - name: Install Qt environment
+      run: |
+        choco install -y qt5-default --version ${{ env.QT_VERSION }}
+        choco install -y cmake
+    
+    - name: qmake
+      run: "C:/Qt/${{ env.QT_VERSION }}/mingw81_64/bin/qmake.exe CloudLogCatQt.pro"
+      
+    - name: make
+      run: mingw32-make.exe -j4
+      
+    - name: windeployqt
+      run: "C:/Qt/${{ env.QT_VERSION }}/mingw81_64/bin/windeployqt.exe release"
+
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v3.1.1
+      with:
+        name: CloudLogCatQt-win
+        path: release
+
+  release:
+    needs: [build-windows]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Add short SHA to env
+        run: echo "GITHUB_SHA_SHORT=$(echo $GITHUB_SHA | cut -c 1-6)" >> $GITHUB_ENV
+
+      - name: Download Artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: CloudLogCatQt-win
+          path: CloudLogCatQt-win
+          
+      - name: ZIP build files
+        uses: montudor/action-zip@v1
+        with:
+          args: zip -qq -r CloudLogCatQt-${{ env.GITHUB_SHA_SHORT }}-win.zip CloudLogCatQt-win
+
+      - name: Automatic Release
+        uses: marvinpinto/action-automatic-releases@latest
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          draft: true
+          prerelease: false
+          title: CloudLogCatQt (${{ env.GITHUB_SHA_SHORT }})
+          files: |
+            CloudLogCatQt-${{ env.GITHUB_SHA_SHORT }}-win.zip
