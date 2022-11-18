@@ -86,7 +86,19 @@ _Read more on the deployment process: [Qt for Windows - Deployment]_
 
 The settings are almost self explaining. According to https://github.com/magicbug/Cloudlog/wiki/API create an API key and fill this together with your CloudLog URL e.g. ```https://<CloudLogServer>/index.php/api/radio``` into the settings pane. Furthermore, add the conneciton to FlRig. The default settings are ```localhost``` and the port ```12345```
 
+Besides that you can optionally configure local oscillators for RX and TX (e.g. if you are using a transverter). The output power can be set (is not read from CAT). If you make use of specific propagation modes this can also be selected from a pre-defined list. For SAT QSOs you can also select the satellite name from the drop-down menu. This list is read from an external file called `sat.dat` which you my need to copy to the folder the executable is in.
+
+With version 2 of Cloudlog there is also an option to configure an identifier. This enables for distinguishing more than one runnig instance of CloudLogCatQt without overwriting each other on the Cloudlog side. The identifier is shown in the hardware interfaces section as well as the drop-down menu during station selection when logging a QSO.
+
+![CloudLogCatQt in Hardware Interfaces Section](doc/HardwareInterfaces.png "Hardware Interfaces")
+
+![CloudLogCatQt Instances selectable during QSO Logging](doc/CATSelection.png "CAT Selection")
+
 ## Screenshots
+
+**Linux**
+
+![CloudLogCatQt Linux Screenshot](doc/Linux.png "CloudLogCatQt")
 
 **macOS**
 
