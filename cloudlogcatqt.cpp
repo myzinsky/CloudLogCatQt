@@ -56,17 +56,18 @@ CloudLogCATQt::CloudLogCATQt(QWidget *parent)
             SLOT(callbackMode(QNetworkReply*))
     );
 
+    powerManager = new QNetworkAccessManager(this);
+    connect(powerManager,
+            SIGNAL(finished(QNetworkReply*)),
+            this,
+            SLOT(callbackPower(QNetworkReply*))
+    );
+
     cloudLogManager = new QNetworkAccessManager(this);
     connect(cloudLogManager,
             SIGNAL(finished(QNetworkReply*)),
             this,
             SLOT(callbackCloudLog(QNetworkReply*))
-    );
-
-    QObject::connect(ui->Power,
-                     SIGNAL(valueChanged(int)),
-                     this,
-                     SLOT(callbackPower())
     );
 
     QObject::connect(ui->propMode,
@@ -132,8 +133,6 @@ CloudLogCATQt::CloudLogCATQt(QWidget *parent)
     qDebug() << "TX Offset:" << txOffset << "Hz";
     rxOffset = ui->RXOffset->text().toDouble();
     qDebug() << "RX Offset:" << rxOffset << "Hz";
-    power = ui->Power->value();
-    qDebug() << "Power:" << power << "W";
     propModeDesc = ui->propMode->currentText();
     propMode = propModeDesc.split('|');
     qDebug() << "Prop Mode:" << propMode[0];
@@ -175,6 +174,7 @@ void CloudLogCATQt::timerEvent(QTimerEvent *event)
 {
     getMode();
     getFrequency();
+    getPower();
 }
 
 QString CloudLogCATQt::parseXML(QString xml)
@@ -191,6 +191,13 @@ QString CloudLogCATQt::parseXML(QString xml)
     */
 
     QXmlStreamReader reader(xml);
+    while(!reader.atEnd() && !reader.hasError()) {
+        if(reader.readNext() == QXmlStreamReader::StartElement && reader.name() == "i4") {
+            return reader.readElementText();
+        }
+    }
+    reader.clear();
+    reader.addData(xml);
     while(!reader.atEnd() && !reader.hasError()) {
         if(reader.readNext() == QXmlStreamReader::StartElement && reader.name() == "value") {
             return reader.readElementText();
@@ -252,7 +259,6 @@ void CloudLogCATQt::loadSettings()
     ui->FLRigPort->setText(settings.value("FLRigPort", "12345").toString());
     ui->TXOffset->setText(settings.value("TXOffset", "0").toString());
     ui->RXOffset->setText(settings.value("RXOffset", "0").toString());
-    ui->Power->setValue(settings.value("Power", "0").toInt());
     propModeShort = settings.value("PropMode", "").toString();
     for (int i=0; i<propModes.size(); i++) {
             QStringList temp = propModes[i].split('|');
@@ -280,7 +286,6 @@ void CloudLogCATQt::callbackFrequency(QNetworkReply *rep)
 
     if(f != frequency) { // Update UI and Cloudlog
         frequency = f;
-        power = ui->Power->value();
         realTxFrequency = frequency;
         if (txOffset != 0.0) {
             realTxFrequency += txOffset;
@@ -309,10 +314,15 @@ void CloudLogCATQt::callbackCloudLog(QNetworkReply *rep)
     qDebug () << QString(rep->readAll());
 }
 
-void CloudLogCATQt::callbackPower()
+void CloudLogCATQt::callbackPower(QNetworkReply *rep)
 {
-    power = ui->Power->value();
-    uploadToCloudLog();
+    int p = parseXML(QString(rep->readAll())).toInt();
+    if(p != power) { // Update UI and Cloudlog
+        power = p;
+        ui->Power->setValue(power);
+        uploadToCloudLog();
+    }
+
 }
 
 void CloudLogCATQt::callbackPropMode()
@@ -356,6 +366,11 @@ void CloudLogCATQt::getFrequency()
 void CloudLogCATQt::getMode()
 {
     getFromFLRig("rig.get_mode", modeManager);
+}
+
+void CloudLogCATQt::getPower()
+{
+    getFromFLRig("rig.get_power", powerManager);
 }
 
 void CloudLogCATQt::on_save_clicked()
