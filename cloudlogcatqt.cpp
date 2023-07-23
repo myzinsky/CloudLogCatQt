@@ -247,7 +247,7 @@ void CloudLogCATQt::uploadToCloudLog()
     cloudLogManager->post(request, data);
 
     qDebug() << "Update Cloud Log: " << data;
-    ui->statusbar->showMessage(modeToSend + " Cloudlog Updated: "
+    ui->statusbar->showMessage("Cloudlog Updated: "
                                + currentTime.toString("yyyy/MM/dd hh:mm:ss")
                                + " | (c) 2020 DL9MJ");
 }
