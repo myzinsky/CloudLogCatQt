@@ -59,6 +59,7 @@ private slots:
     void callbackMode(QNetworkReply *rep);
     void callbackCloudLog(QNetworkReply *rep);
     void callbackPower();
+    void callbackModeOverride();
     void callbackPropMode();
     void callbackSatellite();
 
@@ -92,6 +93,7 @@ private:
     double txOffset;
     double rxOffset;
     int power;
+    QString modeOverride;
 
     QString settingsFile;
 

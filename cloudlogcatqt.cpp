@@ -69,6 +69,12 @@ CloudLogCATQt::CloudLogCATQt(QWidget *parent)
                      SLOT(callbackPower())
     );
 
+    QObject::connect(ui->ModeOverride,
+                     SIGNAL(textChanged(QString)),
+                     this,
+                     SLOT(callbackModeOverride())
+    );
+
     QObject::connect(ui->propMode,
 		    SIGNAL(currentTextChanged(QString)),
 		    this,
@@ -203,11 +209,17 @@ QString CloudLogCATQt::parseXML(QString xml)
 void CloudLogCATQt::uploadToCloudLog()
 {
     // Prevent upload until variables are set
-    if (ui->cloudLogKey->text() == "" || mode == "") {
+    if (ui->cloudLogKey->text() == "" || (mode == "" && modeOverride == "")) {
         return;
     }
     QDateTime currentTime = QDateTime::currentDateTime();
     QByteArray data;
+
+    // check for mode override
+    QString modeToSend = mode;
+    if (modeOverride != "") {
+        modeToSend = modeOverride;
+    }
 
     propMode = propModeDesc.split('|');
     satellite = satelliteDesc.split('|');
@@ -217,11 +229,11 @@ void CloudLogCATQt::uploadToCloudLog()
                 + "\"radio\" : \"CloudLogCATQt (" + ui->cloudLogIdentifier->text() + ")\" ,"
                 + "\"prop_mode\" : \"" + propMode[0] + "\" ,"
                 + "\"frequency\" : \"" + QString{ "%1" }.arg( realTxFrequency, 1, 'f', 0) + "\" ,"
-                + "\"mode\" : \"" + mode + "\" ,";
+                + "\"mode\" : \"" + modeToSend + "\" ,";
     		if (propMode[0] == "SAT") {
 			str += "\"sat_name\" : \"" + satellite[0] + "\" ,"
                             + "\"frequency_rx\" : \"" + QString{ "%1" }.arg( realRxFrequency, 1, 'f', 0) + "\" ,"
-                            + "\"mode_rx\" : \"" + mode + "\" ,";
+                            + "\"mode_rx\" : \"" + modeToSend + "\" ,";
 		}
 		str += "\"power\" : \"" + QString{ "%1" }.arg(power) + "\" ,"
                 + "\"timestamp\" : \"" + currentTime.toString("yyyy/MM/dd hh:mm") + "\""
@@ -312,6 +324,12 @@ void CloudLogCATQt::callbackCloudLog(QNetworkReply *rep)
 void CloudLogCATQt::callbackPower()
 {
     power = ui->Power->value();
+    uploadToCloudLog();
+}
+
+void CloudLogCATQt::callbackModeOverride()
+{
+    modeOverride = ui->ModeOverride->text();
     uploadToCloudLog();
 }
 
