@@ -58,7 +58,7 @@ private slots:
     void callbackFrequency(QNetworkReply *rep);
     void callbackMode(QNetworkReply *rep);
     void callbackCloudLog(QNetworkReply *rep);
-    void callbackPower();
+    void callbackPower(QNetworkReply *rep);
     void callbackPropMode();
     void callbackSatellite();
 
@@ -69,6 +69,7 @@ private:
     int timerId;
     void getFrequency();
     void getMode();
+    void getPower();
     void getFromFLRig(QString command, QNetworkAccessManager *manager);
     QString parseXML(QString xml);
     void uploadToCloudLog();
@@ -76,6 +77,7 @@ private:
 
     QNetworkAccessManager *frequencyManager;
     QNetworkAccessManager *modeManager;
+    QNetworkAccessManager *powerManager;
     QNetworkAccessManager *cloudLogManager;
     double frequency;
     double realTxFrequency;
